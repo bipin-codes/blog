@@ -1,8 +1,8 @@
-name: Deploy Blog
+name: Client Application
 on:
   push:
     paths:
-      - client/*
+      - ./client
 
 jobs:
   build:
