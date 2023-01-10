@@ -1,4 +1,4 @@
-name: Client Application
+name: Client Application Workflow
 on:
   push:
     paths:
