@@ -14,9 +14,9 @@ jobs:
       - run: docker build -t bipincodesdocker/api ./api
 
       - run: docker push bipincodesdocker/client
+      - run: docker push bipincodesdocker/admin
       - run: docker push bipincodesdocker/nginx
-      - run: docker push bipincodesdocker/server
-      - run: docker push bipincodesdocker/worker
+      - run: docker push bipincodesdocker/api
 
       # - name: Generate deployment package
       #   run: zip -r deploy.zip . -x '*.git*'
