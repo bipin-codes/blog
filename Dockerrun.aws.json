@@ -1,0 +1,31 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "client",
+      "image": "bipincodesdocker/client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "api",
+      "image": "bipincodesdocker/api",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "admin",
+      "image": "bipincodesdocker/admin",
+      "hostname": "admin",
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "bipincodesdocker/nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [{ "hostPort": 80, "containerPort": 80 }],
+      "links": ["api", "client", "admin"]
+    }
+  ]
+}

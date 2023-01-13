@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  useEffect(() => {
+    const testFetch = async () => {
+      const result = await (await fetch('/api')).json();
+      console.log(result);
+    };
+    testFetch();
+  });
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.tsx</code> and save to reload.
+          Client <code>src/App.tsx</code> and save to reload.
         </p>
         <a
           className="App-link"

@@ -21,6 +21,14 @@ services:
       - PGHOST=postgres
       - PGPORT=5432
 
+  admin:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./admin
+    volumes:
+      - /app/node_modules
+      - ./admin:/app
+
   client:
     build:
       dockerfile: Dockerfile.dev
@@ -30,13 +38,7 @@ services:
       - ./client:/app
     environment:
       - WDS_SOCKET_PORT=0
-  admin:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./admin
-    volumes:
-      - /app/node_modules
-      - ./admin:/app
+
   nginx:
     depends_on:
       - api
