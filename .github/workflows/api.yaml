@@ -3,7 +3,6 @@ on:
   push:
     paths:
       - api/**
-      - .github/worflows/api.yml
 
 jobs:
   build:
