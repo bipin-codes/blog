@@ -14,4 +14,5 @@ describe('Admin Authentication', () => {
     const response = await request(app).post(`${BASE}/signin`);
     expect(response.statusCode).toBe(200);
   });
+  after(async () => {});
 });
