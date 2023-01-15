@@ -1,11 +1,10 @@
 const express = require('express');
+const authRouter = require('./auth/auth.router');
 
-const sequelize = require('../src/config/database');
+const BASE = '/api/v1';
 
 const app = express();
 
-app.get('/v1/blog', (req, res) => {
-  res.json('okay');
-});
+app.use(`${BASE}/auth`, authRouter);
 
 module.exports = app;

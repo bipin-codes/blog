@@ -1,18 +1,17 @@
 const Sequelize = require('sequelize');
+const app = require('../app');
 
-const sequelize = new Sequelize(
-  process.env.PGDATABASE,
-  process.env.PGUSER,
-  process.env.PGPASSWORD,
-  {
-    dialect: 'postgres',
-    host: process.envPGHOST,
-  }
-);
+const { HOST, MODE, PGDATABASE, PGUSER, PGPASSWORD, PORT } = process.env;
+
+const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
+  dialect: 'postgres',
+  host: HOST,
+  logging: false,
+});
 
 sequelize
   .authenticate()
-  .then((res) => console.log(`response -> ${res}`))
-  .catch((err) => console.log(err));
+  .then((res) => {})
+  .catch((err) => {});
 
 module.exports = sequelize;
