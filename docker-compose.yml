@@ -7,7 +7,7 @@ services:
 
   api:
     build:
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile.test
       context: ./api
     volumes:
       #ignore the node_modules in the container
@@ -20,33 +20,35 @@ services:
       - PGUSER=postgres
       - PGHOST=postgres
       - PGPORT=5432
-
-  admin:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./admin
-    volumes:
-      - /app/node_modules
-      - ./admin:/app
-
-  client:
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./client
-    volumes:
-      - /app/node_modules
-      - ./client:/app
-    environment:
-      - WDS_SOCKET_PORT=0
-
-  nginx:
     depends_on:
-      - api
-      - client
-      - admin
-    restart: always
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./nginx
-    ports:
-      - '3050:80'
+      - postgres
+
+  # admin:
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./admin
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./admin:/app
+
+  # client:
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./client
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./client:/app
+  #   environment:
+  #     - WDS_SOCKET_PORT=0
+
+  # nginx:
+  #   depends_on:
+  #     - api
+  #     - client
+  #     - admin
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile.dev
+  #     context: ./nginx
+  #   ports:
+  #     - '3050:80'
