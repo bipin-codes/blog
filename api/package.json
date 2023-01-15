@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "MODE=TESTING jest --watchAll",
+    "GithubActions_test": "MODE=TESTING jest",
     "dev": "MODE=DEVELOPMENT nodemon",
     "start": "node index.js"
   },
