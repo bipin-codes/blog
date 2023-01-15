@@ -1,5 +1,6 @@
 name: API Application Workflow
 on:
+  workflow_dispatch
   push:
     paths:
       - api/**
