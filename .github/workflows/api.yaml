@@ -1,7 +1,9 @@
 name: API Application Workflow
-on: [push, workflow_dispatch]
-  paths:
-    - api/**
+on:
+  workflow_dispatch
+  # push:
+  #   paths:
+  #     - api/**
 
 jobs:
   build:
