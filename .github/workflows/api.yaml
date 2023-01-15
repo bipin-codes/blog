@@ -18,10 +18,11 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: npm install
-      - name: API testing
-        run: npm run test
+        working-directory: ./app
+      - name: Install Dependencies & run Tests
+        run: |
+          npm install
+          npm run test
         env:
           PGHOST: 'postgres'
           PGDATABASE: 'api'
