@@ -27,7 +27,7 @@ jobs:
           npm install
           npm run test
         env:
-          PGHOST: 'postgres'
+          PGHOST: 'localhost'
           PGDATABASE: 'api'
           PGUSER: 'postgres'
           PGPASSWORD: 'postgres'
