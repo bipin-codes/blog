@@ -13,5 +13,6 @@ describe('Admin Authentication', () => {
   it('can call POST /auth api ', async () => {
     const response = await request(app).post(`${BASE}/signin`);
     expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(200);
   });
 });
