@@ -1,5 +1,9 @@
 name: API Application Workflow
-on: workflow_dispatch
+on:
+  push:
+    paths:
+      - api/**
+      - .github/worflows/api.yml
 
 jobs:
   build:
