@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres'
     environment:
       - POSTGRES_PASSWORD=postgres_password
 
@@ -20,6 +20,7 @@ services:
       - PGUSER=postgres
       - PGHOST=postgres
       - PGPORT=5432
+      - HOST = 5000
     depends_on:
       - postgres
 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "MODE=TESTING jest --watchAll",
+    "test": "MODE=test jest --watchAll",
     "GithubActions_test": "MODE=TESTING jest",
     "dev": "MODE=DEVELOPMENT nodemon",
     "start": "node index.js"
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "jest": "^29.3.1",
     "lodash": "^4.17.21",
