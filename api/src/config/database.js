@@ -1,17 +1,23 @@
 const Sequelize = require('sequelize');
-const app = require('../app');
-
-const { HOST, MODE, PGDATABASE, PGUSER, PGPASSWORD, PORT } = process.env;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PORT } = process.env;
 
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   dialect: 'postgres',
-  host: HOST,
+  host: PGHOST,
   logging: false,
 });
 
+const app = require('../app');
+
 sequelize
   .authenticate()
-  .then((res) => {})
-  .catch((err) => {});
+  .then((res) => {
+    console.log('connected to database');
+  })
+
+  .catch((err) => {
+    console.log('*****error*******' + PGDATABASE);
+    console.log(err);
+  });
 
 module.exports = sequelize;
