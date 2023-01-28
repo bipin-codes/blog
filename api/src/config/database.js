@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
-const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PORT } = process.env;
-
+const { PGDATABASE, PGHOST, PGPASSWORD, PGUSER, PORT } = require('./config');
 const sequelize = new Sequelize(PGDATABASE, PGUSER, PGPASSWORD, {
   dialect: 'postgres',
   host: PGHOST,

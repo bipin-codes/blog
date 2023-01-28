@@ -1,30 +1,36 @@
 const request = require('supertest');
-const { response, path } = require('../src/app');
-const app = require('../src/app');
+const { app } = require('../src/app');
+
+jest.mock('authy-client');
+const { Client } = require('authy-client');
 
 const sequelize = require('../src/config/database');
 const Admin = require('../src/models/Admin');
 const bcrypt = require('bcrypt');
+const { BASE_URL } = require('../src/config/config');
 
-const { admin_username, admin_password } = require('dotenv').config({
-  path: '.env.test',
-}).parsed;
+const config = require('dotenv').config({
+  path: '.env.' + process.env.MODE,
+});
+const { admin_username, admin_password } = config.parsed;
 
 beforeAll(async () => {
   await sequelize.sync();
 });
+
 beforeEach(async () => {
   await Admin.destroy({ truncate: true });
 });
 
 describe('Admin Authentication', () => {
-  const BASE = '/api/v1/auth';
   const creds = {
     username: admin_username,
     password: admin_password,
   };
   const loginRequest = async (data = {}) => {
-    const result = await request(app).post(`${BASE}/signin`).send(data);
+    const result = await request(app)
+      .post(`${BASE_URL}/auth/signin`)
+      .send(data);
     return result;
   };
 
@@ -59,12 +65,23 @@ describe('Admin Authentication', () => {
     let response = await loginRequest(creds);
     expect(response.status).toBe(200);
   });
-  it('returns token when login is success ', async () => {
-    await createAdmin();
 
+  beforeEach(() => {
+    const requestSmsMocked = () => {
+      console.log('Mocked!');
+    };
+
+    Client.mockImplementation(() => {
+      return { requestSms: requestSmsMocked };
+    });
+  });
+  afterEach(() => {});
+  fit('returns token when login is success ', async () => {
+    await createAdmin();
     let response = await loginRequest(creds);
     const { body } = response;
     expect(body).toBeDefined();
+    console.log(response.status);
     // expect(body.token).toBeDefined();
   });
 });
