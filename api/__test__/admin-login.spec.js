@@ -23,6 +23,7 @@ beforeEach(async () => {
 });
 
 describe('Admin Authentication', () => {
+  const auth_resolved_token = 'some_random_token';
   const creds = {
     username: admin_username,
     password: admin_password,
@@ -33,12 +34,45 @@ describe('Admin Authentication', () => {
       .send(data);
     return result;
   };
+  const verifyToken = async () => {
+    const result = await request(app)
+      .post(`${BASE_URL}/auth/verify`)
+      .send({ code: auth_resolved_token });
+    return result;
+  };
 
   const createAdmin = async () => {
     const admin = { username: admin_username, password: admin_password };
     admin.password = await bcrypt.hash(admin.password, 10);
     await Admin.create(admin);
   };
+
+  beforeEach(() => {
+    const requestSmsMocked = (id, options, cb) => {
+      cb(null, { code: auth_resolved_token });
+    };
+    const verifyTokenMock = (id, token, cb) => {
+      cb({ success: true });
+    };
+
+    jest
+      .spyOn(Client.prototype, 'requestSms')
+      .mockImplementation(requestSmsMocked);
+    jest
+      .spyOn(Client.prototype, 'verifyToken')
+      .mockImplementation(verifyTokenMock);
+  });
+  afterEach(() => {
+    Client.mockClear();
+  });
+
+  fit('returns authy response when when login credentials are correct ', async () => {
+    await createAdmin();
+    let response = await loginRequest(creds);
+    let { body } = response;
+    expect(response.status).toBe(200);
+    expect(body.data).toBeDefined();
+  });
 
   it('can call POST /auth api ', async () => {
     const response = await loginRequest();
@@ -64,24 +98,5 @@ describe('Admin Authentication', () => {
     await createAdmin();
     let response = await loginRequest(creds);
     expect(response.status).toBe(200);
-  });
-
-  beforeEach(() => {
-    const requestSmsMocked = () => {
-      console.log('Mocked!');
-    };
-
-    Client.mockImplementation(() => {
-      return { requestSms: requestSmsMocked };
-    });
-  });
-  afterEach(() => {});
-  fit('returns token when login is success ', async () => {
-    await createAdmin();
-    let response = await loginRequest(creds);
-    const { body } = response;
-    expect(body).toBeDefined();
-    console.log(response.status);
-    // expect(body.token).toBeDefined();
   });
 });

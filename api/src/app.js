@@ -8,10 +8,7 @@ const PORT = HOST || 5000;
 
 const app = express();
 app.use(express.json());
-app.use((req, res, next) => {
-  console.log(req.url);
-  next();
-});
+
 app.use(`${BASE_URL}/auth`, authRouter);
 
 app.use((err, req, res, next) => {
