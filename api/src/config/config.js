@@ -8,5 +8,6 @@ module.exports = {
   AUTHY_ACCOUNT_SID: process.env.AUTHY_ACCOUNT_SID,
   AUTHY_AUTH_TOKEN: process.env.AUTHY_AUTH_TOKEN,
   AUTHY_USER_ID: process.env.AUTH_USER_ID, //admin user's authy id on which we send notification we have hardcoded this since we aren't registering the admin user.
+  JWT_SECRET: process.env.SESSION_SECRET,
   BASE_URL: '/api/v1',
 };

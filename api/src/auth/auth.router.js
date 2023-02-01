@@ -1,6 +1,6 @@
-const { signInController } = require('./auth.controller');
-const validator = require('express-validator');
-const { check, body } = require('express-validator');
+const { signInController, verify } = require('./auth.controller');
+const { body } = require('express-validator');
+const { isAuthenticated } = require('../middlewares/auth');
 const authRouter = require('express').Router();
 
 authRouter.post(
@@ -21,5 +21,7 @@ authRouter.post(
     .trim(),
   signInController
 );
+
+authRouter.post('/verify', isAuthenticated, verify);
 
 module.exports = authRouter;

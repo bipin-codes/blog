@@ -21,23 +21,27 @@ beforeAll(async () => {
 beforeEach(async () => {
   await Admin.destroy({ truncate: true });
 });
+afterAll(async () => {
+  await sequelize.close();
+});
 
 describe('Admin Authentication', () => {
-  const auth_resolved_token = 'some_random_token';
   const creds = {
     username: admin_username,
     password: admin_password,
   };
+
   const loginRequest = async (data = {}) => {
     const result = await request(app)
       .post(`${BASE_URL}/auth/signin`)
       .send(data);
     return result;
   };
-  const verifyToken = async () => {
+  const verifyToken = async (token) => {
+    console.log(token);
     const result = await request(app)
       .post(`${BASE_URL}/auth/verify`)
-      .send({ code: auth_resolved_token });
+      .set('Authorization', `Bearer ${token}`);
     return result;
   };
 
@@ -49,10 +53,10 @@ describe('Admin Authentication', () => {
 
   beforeEach(() => {
     const requestSmsMocked = (id, options, cb) => {
-      cb(null, { code: auth_resolved_token });
+      cb(null, { code: 'auth_resolved_token' });
     };
-    const verifyTokenMock = (id, token, cb) => {
-      cb({ success: true });
+    const verifyTokenMock = (data, cb) => {
+      cb(null, { success: true });
     };
 
     jest
@@ -64,14 +68,6 @@ describe('Admin Authentication', () => {
   });
   afterEach(() => {
     Client.mockClear();
-  });
-
-  fit('returns authy response when when login credentials are correct ', async () => {
-    await createAdmin();
-    let response = await loginRequest(creds);
-    let { body } = response;
-    expect(response.status).toBe(200);
-    expect(body.data).toBeDefined();
   });
 
   it('can call POST /auth api ', async () => {
@@ -98,5 +94,31 @@ describe('Admin Authentication', () => {
     await createAdmin();
     let response = await loginRequest(creds);
     expect(response.status).toBe(200);
+  });
+
+  it('returns jwt token when when login credentials are correct ', async () => {
+    await createAdmin();
+    let response = await loginRequest(creds);
+    let {
+      body: { token },
+      status,
+    } = response;
+    expect(status).toBe(200);
+    expect(token).toBeDefined();
+  });
+
+  it('returns 200 if login token is correct', async () => {
+    await createAdmin();
+    let {
+      body: { token },
+    } = await loginRequest(creds);
+    const response = await verifyToken(token);
+    expect(response.status).toBe(200);
+  });
+  it('returns 498 if  token is not correct', async () => {
+    await createAdmin();
+    await loginRequest(creds);
+    const response = await verifyToken('dummy');
+    expect(response.status).toBe(498);
   });
 });
